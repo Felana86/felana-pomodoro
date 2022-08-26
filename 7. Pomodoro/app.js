@@ -15,8 +15,14 @@ displayPause.textContent = returnFormatedTime(restTime);
 const startPauseBtn = document.querySelector(".start-btn");
 startPauseBtn.addEventListener("click", togglePomodoro)
 
+let timerID;
 function togglePomodoro() {
     handlePlayPause()
+
+    initialTime--;
+    displayWork.textContent = returnFormatedTime(initialTime)
+
+    timerID = setInterval(handleTicks, 1000)
 }
 
 let pause = true;
