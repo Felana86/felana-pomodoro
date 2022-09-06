@@ -24,7 +24,8 @@ function togglePomodoro(){
 
     initialTime--;
     displayWork.textContent = returnFormattedTime(initialTime)
-  //handleClassAnimation({work: true, rest: false})
+    handleClassAnimation({work: true, rest: false})
+
 
     timerID = setInterval(handleTicks, 1000)
 }
@@ -41,6 +42,19 @@ function handlePlayPause(){
     }
 }
 
+
+
+function handleClassAnimation(itemState) {
+    for(const item in itemState) {
+        if(itemState[item]) {
+            document.querySelector(`.${item}`).classList.add("active")
+        }
+        else {
+            document.querySelector(`.${item}`).classList.remove("active")
+        }
+    }
+}
+
 const cycles = document.querySelector(".cycles")
 let cycleNumber = 0;
 
@@ -49,10 +63,14 @@ function handleTicks() {
     if(!pause &&  initialTime > 0) {
         initialTime--;
         displayWork.textContent = returnFormattedTime(initialTime)
+        handleClassAnimation({work: true, rest: false})
+
     }
     else if(!pause && initialTime === 0 && restTime > 0) {
         restTime--;
         displayPause.textContent = returnFormattedTime(restTime)
+        handleClassAnimation({work: false, rest: true})
+
     }
     else {
         initialTime = 1799;
@@ -63,4 +81,20 @@ function handleTicks() {
         cycleNumber.textContent = `Cycle(s) : ${cycleNumber}`
 
     }
+}
+
+const resetBtn = document.querySelector(".reset-btn");
+resetBtn.addEventListener("click", reset)
+
+function reset() {
+    initialTime = 1800;
+    restTime = 300;
+    displayWork.textContent = returnFormattedTime(initialTime)
+    displayPause.textContent = returnFormattedTime(restTime)
+
+    startPauseBtn.firstElementChild.src = "ressources/play.svg"
+    cycles.textContent = "Cycle(s) : 0"
+
+    clearInterval(timerID);
+    currentInterval = false;
 }
